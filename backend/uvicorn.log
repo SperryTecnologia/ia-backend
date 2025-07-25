@@ -1,0 +1,25 @@
+INFO:     Started server process [61087]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     10.1.1.170:59050 - "OPTIONS /ask HTTP/1.1" 200 OK
+INFO:     10.1.1.170:59050 - "POST /ask HTTP/1.1" 200 OK
+INFO:     10.1.1.170:59051 - "POST /ask HTTP/1.1" 200 OK
+INFO:     10.1.1.170:59101 - "POST /ask HTTP/1.1" 200 OK
+INFO:     10.1.1.170:59556 - "OPTIONS /ask HTTP/1.1" 200 OK
+INFO:     10.1.1.170:59556 - "POST /ask HTTP/1.1" 200 OK
+INFO:     10.1.1.170:59846 - "OPTIONS /ask HTTP/1.1" 200 OK
+INFO:     10.1.1.170:59846 - "POST /ask HTTP/1.1" 200 OK
+ERROR:root:Claude API error: 404 Client Error: Not Found for url: https://api.anthropic.com/v1/complete
+INFO:     10.1.1.170:59865 - "POST /ask HTTP/1.1" 500 Internal Server Error
+INFO:     10.1.1.170:59866 - "POST /ask HTTP/1.1" 200 OK
+ERROR:root:Claude API error: 404 Client Error: Not Found for url: https://api.anthropic.com/v1/complete
+INFO:     10.1.1.170:59874 - "POST /ask HTTP/1.1" 500 Internal Server Error
+INFO:     10.1.1.170:59875 - "POST /ask HTTP/1.1" 200 OK
+INFO:     10.1.1.171:37838 - "POST /ask HTTP/1.1" 200 OK
+ERROR:root:Claude API error: 404 Client Error: Not Found for url: https://api.anthropic.com/v1/complete
+INFO:     10.1.1.170:59920 - "POST /ask HTTP/1.1" 500 Internal Server Error
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [61087]
