@@ -1,13 +1,11 @@
 #!/bin/bash
+echo "🛑 Parando todos os serviços..."
 
-echo "🛑 Parando Ollama..."
 pkill -f "ollama serve"
-
-echo "🛑 Parando backend uvicorn..."
 pkill -f "uvicorn"
+pkill -f "python3 -m http.server"
 
-echo "🛑 Parando frontend HTTP server na porta 8080..."
-fuser -k 8080/tcp
+echo "🛑 Parando containers do Docker Compose..."
+docker-compose down
 
-echo "✅ Todos os serviços foram parados."
-
+echo "✅ Todos os serviços foram encerrados."

@@ -1,10 +1,43 @@
-version: "3.9"
+version: "3.3"
+
 services:
   backend:
-    build: ./backend
+    build: .
+    container_name: backend
     ports:
       - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - super__postgres
     environment:
-      - CLAUDE_API_KEY=${CLAUDE_API_KEY}
-      - BOLT_API_KEY=${BOLT_API_KEY}
-      - MANUS_API_KEY=${MANUS_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@super__postgres:5432/super__postgres
+
+  superagi:
+    build:
+      context: ./superagi
+    container_name: superagi
+    ports:
+      - "3001:3000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - super__postgres
+
+  super__postgres:
+    image: postgres:14
+    container_name: super__postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: super__postgres
+    volumes:
+      - superagi_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+volumes:
+  superagi_pgdata:
+
