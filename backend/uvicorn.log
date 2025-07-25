@@ -1,1 +1,11 @@
-nohup: failed to run command 'uvicorn': No such file or directory
+INFO:     Started server process [111005]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+WARNING:root:SuperAGI indisponível ou erro: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/agent/ask (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f1fe843dd90>: Failed to establish a new connection: [Errno 111] Connection refused'))
+WARNING:root:Claude falhou: 401 Client Error: Unauthorized for url: https://api.anthropic.com/v1/messages
+INFO:     10.1.1.177:49503 - "POST /ask HTTP/1.1" 200 OK
+WARNING:root:SuperAGI indisponível ou erro: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/agent/ask (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f1fe89c1730>: Failed to establish a new connection: [Errno 111] Connection refused'))
+WARNING:root:Claude falhou: 401 Client Error: Unauthorized for url: https://api.anthropic.com/v1/messages
+ERROR:root:OpenAI falhou: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************SiMA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+INFO:     10.1.1.177:49510 - "POST /ask HTTP/1.1" 500 Internal Server Error
