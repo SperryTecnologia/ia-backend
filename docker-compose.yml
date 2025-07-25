@@ -2,12 +2,11 @@ version: "3.3"
 
 services:
   backend:
-    build: .
+    build:
+      context: ./backend
     container_name: backend
     ports:
-      - "8000:8000"
-    volumes:
-      - .:/app
+      - "8010:8000"  # Porta do host -> porta interna do container (FastAPI)
     depends_on:
       - super__postgres
     environment:
@@ -19,9 +18,12 @@ services:
       context: ./superagi
     container_name: superagi
     ports:
-      - "3001:3000"
+      - "3001:3000"  # Porta do host -> porta interna do SuperAGI
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+    env_file:
+      - ./superagi/.env     
     depends_on:
       - super__postgres
 
@@ -36,7 +38,7 @@ services:
     volumes:
       - superagi_pgdata:/var/lib/postgresql/data
     ports:
-      - "5433:5432"
+      - "5433:5432"  # Porta do host -> PostgreSQL
 
 volumes:
   superagi_pgdata:

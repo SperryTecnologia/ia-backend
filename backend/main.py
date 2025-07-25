@@ -1,55 +1,62 @@
 import os
 import logging
-from fastapi import FastAPI, Request, Response, HTTPException
+logging.basicConfig(level=logging.INFO)
+from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
-import requests
 from openai import OpenAI
+import requests
+from serpapi import GoogleSearch
 
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY")
+SERPAPI_KEY = os.getenv("SERPAPI_API_KEY")  # Também pode ser usado como fallback
+SUPERAGI_URL = os.getenv("SUPERAGI_URL", "http://localhost:3000/api/v1/chat")
+
+if not OPENAI_API_KEY or not CLAUDE_API_KEY:
+    raise RuntimeError("API keys not set")
 
 client = OpenAI(api_key=OPENAI_API_KEY)
-
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # você pode limitar depois se quiser mais segurança
+    allow_origins=["http://10.1.1.171:8081"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+class PromptRequest(BaseModel):
+    prompt: str
+
 @app.options("/{rest_of_path:path}")
 async def preflight_handler(rest_of_path: str, request: Request):
     response = Response()
-    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Origin"] = "http://10.1.1.171:8081"
     response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
     return response
 
-class PromptRequest(BaseModel):
-    prompt: str
-
-@app.post("/ask")
-def ask(req: PromptRequest):
-    prompt = req.prompt
-
-    # 1. Tenta com SuperAGI (local)
+@app.post("/ask/gpt")
+def ask_gpt(req: PromptRequest):
+    logging.info("🔷 Usando: OpenAI GPT")
     try:
-        sa_resp = requests.post("http://localhost:3000/api/agent/ask", json={"prompt": prompt}, timeout=5)
-        if sa_resp.ok:
-            sa_json = sa_resp.json()
-            if sa_json.get("response"):
-                return {"response": sa_json["response"]}
+        response = client.chat.completions.create(
+            model="gpt-4",
+            messages=[{"role": "user", "content": req.prompt}]
+        )
+        return {"response": response.choices[0].message.content}
     except Exception as e:
-        logging.warning(f"SuperAGI indisponível ou erro: {e}")
+        logging.error(f"OpenAI API error: {e}")
+        raise HTTPException(status_code=500, detail=f"OpenAI error: {str(e)}")
 
-    # 2. Claude como fallback
+@app.post("/ask/claude")
+def ask_claude(req: PromptRequest):
+    logging.info("🟠 Usando: Claude")
     try:
         headers = {
             "x-api-key": CLAUDE_API_KEY,
@@ -57,25 +64,54 @@ def ask(req: PromptRequest):
             "Content-Type": "application/json"
         }
         data = {
-            "model": "claude-3-opus-20240229",
-            "max_tokens": 500,
-            "messages": [{"role": "user", "content": prompt}]
+            "model": "claude-3-haiku-20240307",
+            "messages": [{"role": "user", "content": req.prompt}],
+            "max_tokens": 512,
         }
-        resp = requests.post("https://api.anthropic.com/v1/messages", headers=headers, json=data)
-        resp.raise_for_status()
-        result = resp.json()
-        if result.get("content"):
-            return {"response": result["content"][0]["text"]}
+        response = requests.post("https://api.anthropic.com/v1/messages", headers=headers, json=data)
+        response.raise_for_status()
+        return {"response": response.json().get("content", [{}])[0].get("text", "")}
     except Exception as e:
-        logging.warning(f"Claude falhou: {e}")
+        logging.error(f"Claude API error: {e}")
+        raise HTTPException(status_code=500, detail=f"Claude error: {str(e)}")
 
-    # 3. GPT como fallback final
+@app.post("/ask/serpapi")
+def ask_serpapi(req: PromptRequest):
+    logging.info("🟡 Usando: SerpAPI")
     try:
-        response = client.chat.completions.create(
-            model="gpt-4",
-            messages=[{"role": "user", "content": prompt}]
-        )
-        return {"response": response.choices[0].message.content}
+        search = GoogleSearch({
+            "q": req.prompt,
+            "api_key": SERPAPI_KEY
+        })
+        results = search.get_dict()
+        answer_box = results.get("answer_box", {})
+        snippet = results.get("organic_results", [{}])[0].get("snippet", "")
+        return {"response": answer_box.get("answer") or snippet or "Sem resposta."}
     except Exception as e:
-        logging.error(f"OpenAI falhou: {e}")
-        raise HTTPException(status_code=500, detail="Nenhuma IA conseguiu responder.")
+        logging.error(f"SerpAPI error: {e}")
+        raise HTTPException(status_code=500, detail=f"SerpAPI error: {str(e)}")
+
+@app.post("/ask/superagi")
+def ask_superagi(req: PromptRequest):
+    logging.info("🟢 Usando: SuperAGI local")
+    try:
+        response = requests.post(SUPERAGI_URL, json={"input": req.prompt})
+        response.raise_for_status()
+        return {"response": response.json().get("response", "Sem resposta.")}
+    except Exception as e:
+        logging.error(f"Erro no SuperAGI: {e}")
+        raise HTTPException(status_code=500, detail="SuperAGI não respondeu.")
+
+@app.post("/ask")
+def ask(req: PromptRequest):
+    prompt = req.prompt.lower()
+
+    if "claude" in prompt:
+        return ask_claude(req)
+    elif "pesquise" in prompt or "busque" in prompt:
+        return ask_serpapi(req)
+    elif "superagi" in prompt or "sua ia" in prompt:
+        return ask_superagi(req)
+    else:
+        return ask_gpt(req)
+
