@@ -1,65 +1,21 @@
-INFO:     Started server process [365526]
+INFO:     Started server process [421411]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     10.1.1.185:51327 - "GET /api/historico/todos HTTP/1.1" 200 OK
-INFO:     10.1.1.185:51327 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:     10.1.1.185:53320 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:     10.1.1.185:53320 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:     10.1.1.185:53320 - "OPTIONS /ask HTTP/1.1" 200 OK
 INFO:main:🧩 Usando: SuperAGI local
 WARNING:main:⚠️ SuperAGI falhou. Caindo para OpenAI.
-ERROR:main:Erro no SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+ERROR:main:Erro no SuperAGI: HTTPConnectionPool(host='superagi', port=3000): Max retries exceeded with url: /api/v1/chat (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7fa8012dcfa0>: Failed to resolve 'superagi' ([Errno -2] Name or service not known)"))
 INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 INFO:main:🔷 Usando: OpenAI GPT
-WARNING:main:⚠️ Falha ao enviar aprendizado ao SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
-INFO:     10.1.1.185:51328 - "POST /ask HTTP/1.1" 200 OK
-INFO:     10.1.1.185:51328 - "POST /api/historico HTTP/1.1" 307 Temporary Redirect
-INFO:     10.1.1.185:51328 - "OPTIONS /api/historico/ HTTP/1.1" 200 OK
-INFO:     10.1.1.185:51329 - "POST /api/historico/ HTTP/1.1" 200 OK
-INFO:main:🧩 Usando: SuperAGI local
-WARNING:main:⚠️ SuperAGI falhou. Caindo para OpenAI.
-ERROR:main:Erro no SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
-INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-INFO:main:🔷 Usando: OpenAI GPT
-WARNING:main:⚠️ Falha ao enviar aprendizado ao SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
-INFO:     10.1.1.185:51331 - "POST /ask HTTP/1.1" 200 OK
-INFO:     10.1.1.185:51331 - "POST /api/historico HTTP/1.1" 307 Temporary Redirect
-INFO:     10.1.1.185:51331 - "POST /api/historico/ HTTP/1.1" 200 OK
-INFO:     10.1.1.185:51332 - "GET /api/historico/todos HTTP/1.1" 200 OK
-INFO:     10.1.1.185:51332 - "GET /api/historico/todos HTTP/1.1" 200 OK
-INFO:     10.1.1.185:51335 - "GET /api/historico/todos HTTP/1.1" 200 OK
-INFO:     10.1.1.185:51335 - "GET /api/historico/todos HTTP/1.1" 200 OK
-INFO:     10.1.1.185:51354 - "GET /api/historico/todos HTTP/1.1" 200 OK
-INFO:     10.1.1.185:51354 - "GET /api/historico/todos HTTP/1.1" 200 OK
-INFO:main:🧩 Usando: SuperAGI local
-WARNING:main:⚠️ SuperAGI falhou. Caindo para OpenAI.
-ERROR:main:Erro no SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
-INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-INFO:main:🔷 Usando: OpenAI GPT
-WARNING:main:⚠️ Falha ao enviar aprendizado ao SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
-INFO:     10.1.1.185:51355 - "POST /ask HTTP/1.1" 200 OK
-INFO:     10.1.1.185:51355 - "POST /api/historico HTTP/1.1" 307 Temporary Redirect
-INFO:     10.1.1.185:51355 - "POST /api/historico/ HTTP/1.1" 200 OK
-INFO:     10.1.1.185:51934 - "GET /api/historico/todos HTTP/1.1" 200 OK
-INFO:     10.1.1.185:51934 - "GET /api/historico/todos HTTP/1.1" 200 OK
-INFO:     10.1.1.185:51944 - "GET /api/historico/todos HTTP/1.1" 200 OK
-INFO:     10.1.1.185:51944 - "GET /api/historico/todos HTTP/1.1" 200 OK
-INFO:     10.1.1.185:53029 - "OPTIONS /ask HTTP/1.1" 200 OK
-INFO:main:🧩 Usando: SuperAGI local
-WARNING:main:⚠️ SuperAGI falhou. Caindo para OpenAI.
-ERROR:main:Erro no SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
-INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-INFO:main:🔷 Usando: OpenAI GPT
-WARNING:main:⚠️ Falha ao enviar aprendizado ao SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
-INFO:     10.1.1.185:53029 - "POST /ask HTTP/1.1" 200 OK
-INFO:     10.1.1.185:53029 - "OPTIONS /api/historico HTTP/1.1" 200 OK
-INFO:     10.1.1.185:53030 - "POST /api/historico HTTP/1.1" 307 Temporary Redirect
-INFO:     10.1.1.185:53029 - "OPTIONS /api/historico/ HTTP/1.1" 200 OK
-INFO:     10.1.1.185:53030 - "POST /api/historico/ HTTP/1.1" 200 OK
-INFO:main:🧩 Usando: SuperAGI local
-WARNING:main:⚠️ SuperAGI falhou. Caindo para OpenAI.
-ERROR:main:Erro no SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
-INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-INFO:main:🔷 Usando: OpenAI GPT
-WARNING:main:⚠️ Falha ao enviar aprendizado ao SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
-INFO:     10.1.1.185:53038 - "POST /ask HTTP/1.1" 200 OK
-INFO:     10.1.1.185:53038 - "POST /api/historico HTTP/1.1" 307 Temporary Redirect
-INFO:     10.1.1.185:53038 - "POST /api/historico/ HTTP/1.1" 200 OK
+WARNING:main:⚠️ Falha ao enviar aprendizado ao SuperAGI: HTTPConnectionPool(host='superagi', port=3000): Max retries exceeded with url: /api/v1/memory/learn (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7fa80046f100>: Failed to resolve 'superagi' ([Errno -2] Name or service not known)"))
+INFO:     10.1.1.185:53320 - "POST /ask HTTP/1.1" 200 OK
+INFO:     10.1.1.185:53320 - "OPTIONS /api/historico HTTP/1.1" 200 OK
+INFO:     10.1.1.185:53321 - "POST /api/historico HTTP/1.1" 307 Temporary Redirect
+INFO:     10.1.1.185:53320 - "OPTIONS /api/historico/ HTTP/1.1" 200 OK
+INFO:     10.1.1.185:53321 - "POST /api/historico/ HTTP/1.1" 200 OK
+INFO:     10.1.1.185:53350 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:     10.1.1.185:53350 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54140 - "GET /docs HTTP/1.1" 200 OK

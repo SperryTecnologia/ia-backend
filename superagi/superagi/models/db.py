@@ -1,4 +1,5 @@
 from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from superagi.config.config import get_config
 from urllib.parse import urlparse
 from superagi.lib.logger import logger
@@ -13,7 +14,6 @@ def connect_db():
     Returns:
         engine: The SQLAlchemy engine object representing the database connection.
     """
-
     global engine
     if engine is not None:
         return engine
@@ -33,14 +33,16 @@ def connect_db():
     else:
         db_url = urlparse(db_url)
         db_url = db_url.scheme + "://" + db_url.netloc + db_url.path
+
     # Create the SQLAlchemy engine
-    engine = create_engine(db_url,
-                           pool_size=20,  # Maximum number of database connections in the pool
-                           max_overflow=50,  # Maximum number of connections that can be created beyond the pool_size
-                           pool_timeout=30,  # Timeout value in seconds for acquiring a connection from the pool
-                           pool_recycle=1800,  # Recycle connections after this number of seconds (optional)
-                           pool_pre_ping=False,  # Enable connection health checks (optional)
-                           )
+    engine = create_engine(
+        db_url,
+        pool_size=20,
+        max_overflow=50,
+        pool_timeout=30,
+        pool_recycle=1800,
+        pool_pre_ping=False,
+    )
 
     # Test the connection
     try:
@@ -49,4 +51,12 @@ def connect_db():
         connection.close()
     except Exception as e:
         logger.error(f"Unable to connect to the database:{e}")
+
     return engine
+
+
+# ? NOVO: função DBSession para uso nos controllers
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=connect_db())
+
+def DBSession():
+    return SessionLocal()

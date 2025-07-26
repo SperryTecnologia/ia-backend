@@ -6,15 +6,17 @@ services:
       context: ./backend
     container_name: backend
     ports:
-      - "8010:8000"  # Porta do host -> FastAPI
+      - "8010:8000"  # Host -> Backend
     depends_on:
       - superagi
       - super__postgres
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - CLAUDE_API_KEY=${CLAUDE_API_KEY}
+      - SERPAPI_API_KEY=${SERPAPI_API_KEY}
       - DATABASE_URL=postgresql+psycopg2://postgres:postgres@super__postgres:5432/super__postgres
-      - SUPERAGI_URL=http://superagi:3000/api/v1/chat
-      - SUPERAGI_LEARN_URL=http://superagi:3000/api/v1/memory/learn
+      - SUPERAGI_URL=${SUPERAGI_URL}
+      - SUPERAGI_LEARN_URL=${SUPERAGI_LEARN_URL}
     env_file:
       - .env
 
@@ -23,7 +25,7 @@ services:
       context: ./superagi
     container_name: superagi
     ports:
-      - "3001:3000"  # Porta do host -> SuperAGI
+      - "3001:3000"  # Host -> SuperAGI
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - ENCRYPTION_KEY=${ENCRYPTION_KEY}
@@ -31,7 +33,7 @@ services:
     env_file:
       - ./superagi/.env
     volumes:
-      - ./superagi/config.yaml:/app/config.yaml  # <- Novo: mapeia o config.yaml
+      - ./superagi/config.yaml:/app/config.yaml
     depends_on:
       - super__postgres
 
@@ -46,7 +48,7 @@ services:
     volumes:
       - superagi_pgdata:/var/lib/postgresql/data
     ports:
-      - "5433:5432"  # Porta do host -> PostgreSQL
+      - "5432:5432"  # ← alterado para padrão local
 
 volumes:
   superagi_pgdata:
