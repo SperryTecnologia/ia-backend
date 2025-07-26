@@ -1,4 +1,3 @@
-
 import os
 import logging
 import requests
@@ -6,105 +5,100 @@ from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
+from pathlib import Path
 from openai import OpenAI
 from serpapi import GoogleSearch
+from typing import Optional
+from datetime import datetime
 
-load_dotenv()
+# 🔐 Carrega variáveis do .env da raiz
+env_path = Path(__file__).resolve().parent.parent / ".env"
+load_dotenv(dotenv_path=env_path)
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY")
-SERPAPI_KEY = os.getenv("SERPAPI_API_KEY")
-SUPERAGI_URL = os.getenv("SUPERAGI_URL", "http://localhost:3000/api/v1/chat")
-
-client = OpenAI(api_key=OPENAI_API_KEY)
+# 🔧 Configurações iniciais
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
+
+# ✅ CORS (permite acesso de fora do backend, como do frontend React)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://10.1.1.171:8081"],
+    allow_origins=["*"],  # ajuste para seu domínio se quiser restringir
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-class PromptRequest(BaseModel):
+# ✅ Importa o router de histórico
+from historico import router as historico_router
+app.include_router(historico_router, prefix="/api/historico")
+
+# 🔧 URLs do SuperAGI
+SUPERAGI_URL = os.getenv("SUPERAGI_URL", "http://localhost:3000/api/v1/chat")
+SUPERAGI_LEARN_URL = os.getenv("SUPERAGI_LEARN_URL", "http://localhost:3000/api/v1/memory/learn")
+
+# 🔧 Modelos para a rota /ask
+class Pergunta(BaseModel):
     prompt: str
 
-@app.options("/{rest_of_path:path}")
-async def preflight_handler(rest_of_path: str, request: Request):
-    response = Response()
-    response.headers["Access-Control-Allow-Origin"] = "http://10.1.1.171:8081"
-    response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-    return response
+# ✅ Função para resposta local alternativa
+def responder_localmente(prompt: str) -> Optional[str]:
+    prompt_lower = prompt.lower()
 
-def send_to_superagi_learn(prompt, answer):
-    try:
-        logging.info("📥 Enviando para SuperAGI aprender...")
-        r = requests.post(SUPERAGI_URL, json={"input": f"{prompt}\n\n{answer}"})
-        r.raise_for_status()
-        logging.info("✅ Aprendizado enviado ao SuperAGI.")
-    except Exception as e:
-        logging.warning(f"⚠️ SuperAGI não pôde aprender: {e}")
+    if "hora" in prompt_lower:
+        return f"A hora atual é: {datetime.now().strftime('%H:%M:%S')}"
 
+    elif "data" in prompt_lower:
+        return f"A data de hoje é: {datetime.now().strftime('%d/%m/%Y')}"
+
+    elif "seu nome" in prompt_lower or "quem é você" in prompt_lower:
+        return "Sou a debuga.ai, sua assistente pessoal!"
+
+    return None  # fallback
+
+# ✅ Rota principal
 @app.post("/ask")
-def ask(req: PromptRequest):
-    prompt = req.prompt.lower()
-
+async def ask(pergunta: Pergunta):
+    prompt = pergunta.prompt
+    logger.info(f"🧩 Usando: SuperAGI local")
     try:
-        logging.info("🧩 Usando: SuperAGI local")
-        res = requests.post(SUPERAGI_URL, json={"input": req.prompt})
-        res.raise_for_status()
-        resposta = res.json().get("response", "Sem resposta.")
-        return {"response": resposta}
+        resposta = requests.post(SUPERAGI_URL, json={"input": prompt})
+        resposta.raise_for_status()
+        resposta_json = resposta.json()
+        texto_resposta = resposta_json.get("response", "Sem resposta do SuperAGI.")
+        logger.info("✅ SuperAGI respondeu com sucesso.")
+        ia_usada = "SuperAGI"
     except Exception as e:
-        logging.error(f"Erro no SuperAGI: {e}")
-        logging.warning("⚠️ SuperAGI falhou. Caindo para fallback...")
+        logger.warning("⚠️ SuperAGI falhou. Caindo para OpenAI.")
+        logger.error(f"Erro no SuperAGI: {e}")
+        texto_resposta = responder_localmente(prompt)
+        ia_usada = "local"
+        if not texto_resposta:
+            try:
+                client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+                completion = client.chat.completions.create(
+                    model="gpt-4",
+                    messages=[{"role": "user", "content": prompt}]
+                )
+                texto_resposta = completion.choices[0].message.content
+                ia_usada = "OpenAI GPT"
+                logger.info("🔷 Usando: OpenAI GPT")
+            except Exception as e2:
+                logger.error(f"❌ OpenAI também falhou: {e2}")
+                texto_resposta = "Erro ao buscar resposta com IA externa."
+                ia_usada = "Falha total"
 
-    if "claude" in prompt:
-        try:
-            logging.info("🧠 Usando: Claude")
-            headers = {
-                "x-api-key": CLAUDE_API_KEY,
-                "anthropic-version": "2023-06-01",
-                "Content-Type": "application/json"
-            }
-            data = {
-                "model": "claude-3-haiku-20240307",
-                "messages": [{"role": "user", "content": req.prompt}],
-                "max_tokens": 512,
-            }
-            response = requests.post("https://api.anthropic.com/v1/messages", headers=headers, json=data)
-            response.raise_for_status()
-            answer = response.json().get("content", [{}])[0].get("text", "")
-            send_to_superagi_learn(req.prompt, answer)
-            return {"response": answer}
-        except Exception as e:
-            logging.error(f"Claude error: {e}")
-
-    if any(k in prompt for k in ["pesquise", "busque", "temperatura", "horas", "cotação", "preço", "valor", "quando", "quem", "onde", "data"]):
-        try:
-            logging.info("🔎 Usando: SerpAPI")
-            search = GoogleSearch({
-                "q": req.prompt,
-                "api_key": SERPAPI_KEY
-            })
-            results = search.get_dict()
-            answer = results.get("answer_box", {}).get("answer") or                      results.get("organic_results", [{}])[0].get("snippet", "") or "Sem resposta."
-            send_to_superagi_learn(req.prompt, answer)
-            return {"response": answer}
-        except Exception as e:
-            logging.error(f"SerpAPI error: {e}")
-
+    # ✅ Tenta enviar para aprendizado SuperAGI
     try:
-        logging.info("🔷 Usando: OpenAI GPT")
-        response = client.chat.completions.create(
-            model="gpt-4",
-            messages=[{"role": "user", "content": req.prompt}]
-        )
-        answer = response.choices[0].message.content
-        send_to_superagi_learn(req.prompt, answer)
-        return {"response": answer}
+        requests.post(SUPERAGI_LEARN_URL, json={
+            "input": prompt,
+            "output": texto_resposta
+        })
     except Exception as e:
-        logging.error(f"OpenAI error: {e}")
-        raise HTTPException(status_code=500, detail="Erro em todos os modelos de IA.")
+        logger.warning(f"⚠️ Falha ao enviar aprendizado ao SuperAGI: {e}")
+
+    return {
+        "resposta": texto_resposta,
+        "ia_usada": ia_usada
+    }

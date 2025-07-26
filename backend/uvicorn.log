@@ -1,61 +1,65 @@
-INFO:     Started server process [330384]
+INFO:     Started server process [365526]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     10.1.1.185:50227 - "OPTIONS /ask HTTP/1.1" 200 OK
-INFO:root:🧩 Usando: SuperAGI local
-ERROR:root:Erro no SuperAGI: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/chat (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f73e50e5160>: Failed to establish a new connection: [Errno 111] Connection refused'))
-WARNING:root:⚠️ SuperAGI falhou. Caindo para OpenAI.
-INFO:root:🔷 Usando: OpenAI GPT
+INFO:     10.1.1.185:51327 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:     10.1.1.185:51327 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:main:🧩 Usando: SuperAGI local
+WARNING:main:⚠️ SuperAGI falhou. Caindo para OpenAI.
+ERROR:main:Erro no SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
 INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-INFO:     10.1.1.185:50227 - "POST /ask HTTP/1.1" 200 OK
-INFO:root:🧩 Usando: SuperAGI local
-ERROR:root:Erro no SuperAGI: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/chat (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f73e424c610>: Failed to establish a new connection: [Errno 111] Connection refused'))
-WARNING:root:⚠️ SuperAGI falhou. Caindo para OpenAI.
-INFO:root:🔷 Usando: OpenAI GPT
+INFO:main:🔷 Usando: OpenAI GPT
+WARNING:main:⚠️ Falha ao enviar aprendizado ao SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+INFO:     10.1.1.185:51328 - "POST /ask HTTP/1.1" 200 OK
+INFO:     10.1.1.185:51328 - "POST /api/historico HTTP/1.1" 307 Temporary Redirect
+INFO:     10.1.1.185:51328 - "OPTIONS /api/historico/ HTTP/1.1" 200 OK
+INFO:     10.1.1.185:51329 - "POST /api/historico/ HTTP/1.1" 200 OK
+INFO:main:🧩 Usando: SuperAGI local
+WARNING:main:⚠️ SuperAGI falhou. Caindo para OpenAI.
+ERROR:main:Erro no SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
 INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-INFO:     10.1.1.185:50249 - "POST /ask HTTP/1.1" 200 OK
-INFO:root:🧩 Usando: SuperAGI local
-ERROR:root:Erro no SuperAGI: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/chat (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f73e421b0d0>: Failed to establish a new connection: [Errno 111] Connection refused'))
-WARNING:root:⚠️ SuperAGI falhou. Caindo para OpenAI.
-INFO:root:🔷 Usando: OpenAI GPT
+INFO:main:🔷 Usando: OpenAI GPT
+WARNING:main:⚠️ Falha ao enviar aprendizado ao SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+INFO:     10.1.1.185:51331 - "POST /ask HTTP/1.1" 200 OK
+INFO:     10.1.1.185:51331 - "POST /api/historico HTTP/1.1" 307 Temporary Redirect
+INFO:     10.1.1.185:51331 - "POST /api/historico/ HTTP/1.1" 200 OK
+INFO:     10.1.1.185:51332 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:     10.1.1.185:51332 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:     10.1.1.185:51335 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:     10.1.1.185:51335 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:     10.1.1.185:51354 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:     10.1.1.185:51354 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:main:🧩 Usando: SuperAGI local
+WARNING:main:⚠️ SuperAGI falhou. Caindo para OpenAI.
+ERROR:main:Erro no SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
 INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-INFO:     10.1.1.185:50250 - "POST /ask HTTP/1.1" 200 OK
-INFO:     10.1.1.185:50596 - "OPTIONS /ask HTTP/1.1" 200 OK
-INFO:root:🧩 Usando: SuperAGI local
-ERROR:root:Erro no SuperAGI: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/chat (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f73e421d460>: Failed to establish a new connection: [Errno 111] Connection refused'))
-WARNING:root:⚠️ SuperAGI falhou. Caindo para OpenAI.
-INFO:root:🔷 Usando: OpenAI GPT
+INFO:main:🔷 Usando: OpenAI GPT
+WARNING:main:⚠️ Falha ao enviar aprendizado ao SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+INFO:     10.1.1.185:51355 - "POST /ask HTTP/1.1" 200 OK
+INFO:     10.1.1.185:51355 - "POST /api/historico HTTP/1.1" 307 Temporary Redirect
+INFO:     10.1.1.185:51355 - "POST /api/historico/ HTTP/1.1" 200 OK
+INFO:     10.1.1.185:51934 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:     10.1.1.185:51934 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:     10.1.1.185:51944 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:     10.1.1.185:51944 - "GET /api/historico/todos HTTP/1.1" 200 OK
+INFO:     10.1.1.185:53029 - "OPTIONS /ask HTTP/1.1" 200 OK
+INFO:main:🧩 Usando: SuperAGI local
+WARNING:main:⚠️ SuperAGI falhou. Caindo para OpenAI.
+ERROR:main:Erro no SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
 INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-INFO:     10.1.1.185:50596 - "POST /ask HTTP/1.1" 200 OK
-INFO:root:🧩 Usando: SuperAGI local
-ERROR:root:Erro no SuperAGI: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/chat (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f73e421beb0>: Failed to establish a new connection: [Errno 111] Connection refused'))
-WARNING:root:⚠️ SuperAGI falhou. Caindo para OpenAI.
-INFO:root:🔷 Usando: OpenAI GPT
+INFO:main:🔷 Usando: OpenAI GPT
+WARNING:main:⚠️ Falha ao enviar aprendizado ao SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+INFO:     10.1.1.185:53029 - "POST /ask HTTP/1.1" 200 OK
+INFO:     10.1.1.185:53029 - "OPTIONS /api/historico HTTP/1.1" 200 OK
+INFO:     10.1.1.185:53030 - "POST /api/historico HTTP/1.1" 307 Temporary Redirect
+INFO:     10.1.1.185:53029 - "OPTIONS /api/historico/ HTTP/1.1" 200 OK
+INFO:     10.1.1.185:53030 - "POST /api/historico/ HTTP/1.1" 200 OK
+INFO:main:🧩 Usando: SuperAGI local
+WARNING:main:⚠️ SuperAGI falhou. Caindo para OpenAI.
+ERROR:main:Erro no SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
 INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-INFO:     10.1.1.185:50633 - "POST /ask HTTP/1.1" 200 OK
-INFO:root:🧩 Usando: SuperAGI local
-ERROR:root:Erro no SuperAGI: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/chat (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f73e424cb20>: Failed to establish a new connection: [Errno 111] Connection refused'))
-WARNING:root:⚠️ SuperAGI falhou. Caindo para OpenAI.
-INFO:root:🔷 Usando: OpenAI GPT
-INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-INFO:     10.1.1.185:50635 - "POST /ask HTTP/1.1" 200 OK
-INFO:     10.1.1.185:50665 - "OPTIONS /ask HTTP/1.1" 200 OK
-INFO:root:🧩 Usando: SuperAGI local
-ERROR:root:Erro no SuperAGI: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/chat (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f73e42301f0>: Failed to establish a new connection: [Errno 111] Connection refused'))
-WARNING:root:⚠️ SuperAGI falhou. Caindo para OpenAI.
-INFO:root:🔷 Usando: OpenAI GPT
-INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-INFO:     10.1.1.185:50665 - "POST /ask HTTP/1.1" 200 OK
-INFO:root:🧩 Usando: SuperAGI local
-ERROR:root:Erro no SuperAGI: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/chat (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f73e426bfa0>: Failed to establish a new connection: [Errno 111] Connection refused'))
-WARNING:root:⚠️ SuperAGI falhou. Caindo para OpenAI.
-INFO:root:🔷 Usando: OpenAI GPT
-INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-INFO:     10.1.1.185:50666 - "POST /ask HTTP/1.1" 200 OK
-INFO:root:🧩 Usando: SuperAGI local
-ERROR:root:Erro no SuperAGI: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/chat (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f73e4225490>: Failed to establish a new connection: [Errno 111] Connection refused'))
-WARNING:root:⚠️ SuperAGI falhou. Caindo para OpenAI.
-INFO:root:🔷 Usando: OpenAI GPT
-INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-INFO:     10.1.1.185:50667 - "POST /ask HTTP/1.1" 200 OK
+INFO:main:🔷 Usando: OpenAI GPT
+WARNING:main:⚠️ Falha ao enviar aprendizado ao SuperAGI: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+INFO:     10.1.1.185:53038 - "POST /ask HTTP/1.1" 200 OK
+INFO:     10.1.1.185:53038 - "POST /api/historico HTTP/1.1" 307 Temporary Redirect
+INFO:     10.1.1.185:53038 - "POST /api/historico/ HTTP/1.1" 200 OK

@@ -1,22 +1,33 @@
 #!/bin/bash
 
-echo "🛑 Encerrando serviços em execução..."
+echo "🛑 Encerrando serviços do Debuga.ai..."
 
-# Mata os processos do backend, frontend, Ollama
-pkill -f "ollama serve"
-pkill -f "uvicorn"
-pkill -f "npm run dev"
-pkill -f "python3 -m http.server"
+# Parar backend
+if [ -f backend.pid ]; then
+  kill $(cat backend.pid) && rm backend.pid
+  echo "✅ Backend parado."
+fi
 
-# Libera as portas
-fuser -k 8080/tcp || true
-fuser -k 8081/tcp || true
-fuser -k 3000/tcp || true
-fuser -k 8000/tcp || true
+# Parar frontend (vite)
+if [ -f frontend.pid ]; then
+  kill $(cat frontend.pid) && rm frontend.pid
+  echo "✅ Frontend parado."
+fi
 
-# Para os containers do Docker Compose
-echo "🛑 Parando containers do Docker Compose..."
+# Parar learn_receiver
+if [ -f superagi/learn_receiver.pid ]; then
+  kill $(cat superagi/learn_receiver.pid) && rm superagi/learn_receiver.pid
+  echo "✅ Learn_receiver parado."
+fi
+
+# Parar containers docker
 docker-compose down
 
-echo "✅ Todos os serviços foram encerrados."
+# Parar ollama
+pkill -f "ollama serve" && echo "✅ Ollama parado."
+
+echo "🧼 Limpeza de logs antigos (opcional)..."
+rm -f backend/uvicorn.log frontend/vite.log superagi/learn_receiver.log
+
+echo "✅ Todos os serviços foram encerrados com sucesso!"
 
